@@ -92,4 +92,4 @@ Result: 8
 - They can be used for logging, enforcing access control, measuring execution time, and more.
 - Use `@decorator_name` to apply a decorator in a clean and readable way.
 
-Let me know if you'd like further clarification!
+
