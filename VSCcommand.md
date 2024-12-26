@@ -6,9 +6,7 @@
 
 2. Use keyboard shortcuts:
    - On Windows/Linux: `Ctrl + ]` to indent, `Ctrl + [` to unindent[3].
-     ```
    - On macOS: `Cmd + ]` to indent, `Cmd + [` to unindent[3].
-     ```
 
 3. For automatic indentation of multiple lines:
    - Select the lines and press `Ctrl + Shift + I` (Windows/Linux) or `Cmd + Shift + I` (macOS) to format the document[1].
