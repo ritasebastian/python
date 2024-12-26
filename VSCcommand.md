@@ -15,4 +15,8 @@ To indent a set of lines in Visual Studio Code, you can use the following method
    - Set "Editor: Auto Indent" to "Full"[1].
 
 5. Use a language-specific formatter or linter extension for more precise indentation control[1].
-
+--
+***To comment out a set of lines in Visual Studio Code, you can use the following keyboard shortcuts
+--
+Select the lines you want to comment
+Press ⌘ + / to toggle line comments
