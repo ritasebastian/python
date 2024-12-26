@@ -20,7 +20,6 @@
 ---
 ***To comment out a set of lines in Visual Studio Code, you can use the following keyboard shortcuts
 ---
-```
 Select the lines you want to comment
 Press ⌘ + / to toggle line comments
-```
+
