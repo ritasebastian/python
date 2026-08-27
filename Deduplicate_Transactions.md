@@ -1,3 +1,6 @@
+Yes. This is the cleaner **one-pass dictionary approach**. Here's a GitHub-ready version using exactly that pattern.
+
+```python
 """
 Deduplicate Transactions - Keep Latest Record
 
@@ -62,3 +65,39 @@ result = deduplicate_transactions(transactions)
 
 for txn in result:
     print(txn)
+```
+
+Output:
+
+```text
+{'txn_id': 'T101', 'amount': 550, 'timestamp': '2026-08-20 12:00:00'}
+{'txn_id': 'T102', 'amount': 350, 'timestamp': '2026-08-20 13:00:00'}
+{'txn_id': 'T103', 'amount': 700, 'timestamp': '2026-08-20 09:00:00'}
+```
+
+The key line is:
+
+```python
+if txn_id not in latest or txn["timestamp"] > latest[txn_id]["timestamp"]:
+    latest[txn_id] = txn
+```
+
+Read it in English:
+
+> **If I haven't seen this transaction ID before OR this transaction is newer than the one I already have, store this transaction.**
+
+The `or` is especially important. Python uses **short-circuit evaluation** here. If:
+
+```python
+txn_id not in latest
+```
+
+is `True`, Python doesn't need to evaluate:
+
+```python
+latest[txn_id]["timestamp"]
+```
+
+So you don't get a `KeyError` for a new `txn_id`.
+
+One production note: these timestamp strings compare correctly because they're consistently formatted as `YYYY-MM-DD HH:MM:SS`. If timestamp formats/time zones can vary, parse them to `datetime` before comparing.
