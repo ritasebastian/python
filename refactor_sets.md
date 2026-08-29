@@ -1,3 +1,6 @@
+Absolutely. Here is the complete refactored version we built, kept simple and readable so you can save it in GitHub.
+
+```python
 # ============================================================
 # SAMPLE DATA
 # ============================================================
@@ -314,3 +317,100 @@ for customer in result:
     print("Average:", customer["average_order_amount"])
 
     print("Category:", customer["category"])
+```
+
+The output will be:
+
+```text
+CUSTOMER ORDER REPORT
+=====================
+
+----------------------------
+Customer ID: 101
+Name: John
+Email: john@gmail.com
+Country: US
+Order IDs: [5001, 5006]
+Orders: 2
+Total: 700
+Average: 350.0
+Category: GOLD
+
+----------------------------
+Customer ID: 102
+Name: Mary
+Email: mary@gmail.com
+Country: CA
+Order IDs: [5002, 5007]
+Orders: 2
+Total: 650
+Average: 325.0
+Category: GOLD
+
+----------------------------
+Customer ID: 105
+Name: Sam
+Email: sam@gmail.com
+Country: US
+Order IDs: [5005]
+Orders: 1
+Total: 300
+Average: 300.0
+Category: SILVER
+```
+
+### What you refactored
+
+The important improvement is the flow:
+
+```text
+RAW DATA
+   │
+   ├── customers
+   │      ↓
+   │   clean_customer()
+   │      ↓
+   │   customer_lookup
+   │
+   ├── payments
+   │      ↓
+   │   clean_payment()
+   │      ↓
+   │   payment_lookup
+   │
+   └── orders
+          ↓
+      clean_order()
+          ↓
+      PROCESS ORDERS
+          ↓
+    customer_summary
+          ↓
+    calculate average
+    calculate category
+          ↓
+        sort()
+          ↓
+     FINAL REPORT
+```
+
+The biggest optimization you made is replacing repeated nested searches like:
+
+```python
+for order in orders:
+    for payment in payments:
+```
+
+with a lookup:
+
+```python
+payment = payment_lookup.get(order_id)
+```
+
+and similarly replacing repeated customer searches with:
+
+```python
+customer = customer_lookup.get(customer_id)
+```
+
+That's the version I'd keep as your **readable refactoring practice version** before later making it shorter with comprehensions or more advanced Python.
