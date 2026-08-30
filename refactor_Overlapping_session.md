@@ -1,4 +1,4 @@
-from collections import defaultdict
+```from collections import defaultdict
 from pprint import pprint
 
 
@@ -60,7 +60,7 @@ def merge_sessions(sessions):
 
 
 pprint(merge_sessions(sessions))
-
+```
 # Merge Overlapping Sessions
 
 ## Problem
