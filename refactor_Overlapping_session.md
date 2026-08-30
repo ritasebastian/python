@@ -1,3 +1,66 @@
+from collections import defaultdict
+from pprint import pprint
+
+
+sessions = [
+    {"user_id": 101, "start": 1, "end": 5},
+    {"user_id": 101, "start": 3, "end": 8},
+    {"user_id": 102, "start": 2, "end": 4},
+    {"user_id": 101, "start": 10, "end": 15},
+    {"user_id": 102, "start": 3, "end": 6},
+]
+
+
+def merge_sessions(sessions):
+
+    # Group sessions by user_id
+    user_sessions = defaultdict(list)
+
+    for session in sessions:
+        user_id = session["user_id"]
+        user_sessions[user_id].append(session)
+
+    result = []
+
+    # Process each user
+    for user_id, user_session_list in user_sessions.items():
+
+        # Sort by start time
+        user_session_list.sort(key=lambda x: x["start"])
+
+        merged = []
+
+        for session in user_session_list:
+
+            # First session - nothing to compare
+            if not merged:
+                merged.append(session.copy())
+                continue
+
+            # Get the previous merged session
+            previous = merged[-1]
+
+            # Check overlap
+            if session["start"] <= previous["end"]:
+
+                # Merge by extending the end time
+                previous["end"] = max(
+                    previous["end"],
+                    session["end"]
+                )
+
+            else:
+                # No overlap
+                merged.append(session.copy())
+
+        # Add this user's merged sessions
+        result.extend(merged)
+
+    return result
+
+
+pprint(merge_sessions(sessions))
+
 # Merge Overlapping Sessions
 
 ## Problem
