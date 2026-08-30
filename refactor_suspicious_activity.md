@@ -1,3 +1,52 @@
+from collections import defaultdict, deque
+
+
+def find_suspicious_transactions(transactions):
+
+    # Each account_id gets its own deque
+    # Example:
+    # A1 -> deque([10, 15, 18])
+    # A2 -> deque([16])
+    windows = defaultdict(deque)
+
+    suspicious = []
+
+    for txn in transactions:
+
+        account_id = txn["account_id"]
+        current_time = txn["timestamp"]
+
+        # Get the deque for the current account
+        window = windows[account_id]
+
+        # Remove timestamps older than 10 seconds
+        while window and current_time - window[0] > 10:
+            window.popleft()
+
+        # Add current timestamp
+        window.append(current_time)
+
+        # If this account has 3 or more transactions
+        # within the 10-second window, flag current transaction
+        if len(window) >= 3:
+            suspicious.append(txn)
+
+    return suspicious
+
+
+transactions = [
+    {"account_id": "A1", "timestamp": 10, "amount": 100},
+    {"account_id": "A1", "timestamp": 15, "amount": 200},
+    {"account_id": "A2", "timestamp": 16, "amount": 50},
+    {"account_id": "A1", "timestamp": 18, "amount": 300},
+    {"account_id": "A1", "timestamp": 30, "amount": 400},
+]
+
+
+result = find_suspicious_transactions(transactions)
+
+print(result)
+
 # Detect Suspicious Transactions Using a Sliding Time Window
 
 ## Problem
