@@ -17,48 +17,71 @@ To properly **track multiple enter-exit cycles** for each employee, we need to e
 ```python
 from collections import defaultdict
 
-# Step 1: Badge swipe records
-data = [("arockia", "enter"), ("arockia", "exit"),
-        ("dave", "exit"), ("david", "enter"),
-        ("arockia", "enter"), ("arockia", "enter"),
-        ("arockia", "exit"), ("dave", "enter"),
-        ("dave", "exit"), ("dave", "exit"), ("david", "exit"),
-        ("john", "enter"), ("john", "exit"), ("john", "enter"), ("john", "exit")]  # Proper multiple enter-exit
 
-# Step 2: Store employee badge data
-badge_log = defaultdict(list)
+def group_badge_logs(data):
+    badge_log = defaultdict(list)
 
-for employee, action in data:
-    badge_log[employee].append(action)
+    for employee, action in data:
+        badge_log[employee].append(action)
 
-# Step 3: Define sets to track valid and invalid users
-valid_users = set()      # Employees with correct enter-exit sequences
-invalid_users = set()    # Employees who break the enter-exit pattern
+    return badge_log
 
-# Step 4: Check for proper multiple enter-exit sequences
-for employee, actions in badge_log.items():
-    open_enters = 0  # Tracks number of enters that are not exited
-    valid = True     # Assume valid unless an issue is found
+
+def is_valid_sequence(actions):
+    expected_action = "enter"
 
     for action in actions:
+        if action != expected_action:
+            return False
+
         if action == "enter":
-            if open_enters > 0:  # If already entered before an exit
-                valid = False  # Mark as invalid
-            open_enters += 1
-        elif action == "exit":
-            if open_enters == 0:  # If exiting before entering
-                valid = False  # Mark as invalid
-            else:
-                open_enters -= 1  # Reduce the open enters count
+            expected_action = "exit"
+        else:
+            expected_action = "enter"
 
-    if valid and open_enters == 0:  # Valid only if all enters have exits
-        valid_users.add(employee)
-    else:
-        invalid_users.add(employee)
+    # At the end, employee should be outside,
+    # so the next expected action should be "enter"
+    return expected_action == "enter"
 
-# Step 5: Print results
-print("Employees with valid multiple enter-exit sequences:", valid_users)
-print("Employees with invalid enter-exit sequences:", invalid_users)
+
+def validate_badges(data):
+    badge_log = group_badge_logs(data)
+
+    valid_users = set()
+    invalid_users = set()
+
+    for employee, actions in badge_log.items():
+        if is_valid_sequence(actions):
+            valid_users.add(employee)
+        else:
+            invalid_users.add(employee)
+
+    return valid_users, invalid_users
+
+
+data = [
+    ("arockia", "enter"),
+    ("arockia", "exit"),
+    ("dave", "exit"),
+    ("david", "enter"),
+    ("arockia", "enter"),
+    ("arockia", "enter"),
+    ("arockia", "exit"),
+    ("dave", "enter"),
+    ("dave", "exit"),
+    ("dave", "exit"),
+    ("david", "exit"),
+    ("john", "enter"),
+    ("john", "exit"),
+    ("john", "enter"),
+    ("john", "exit")
+]
+
+
+valid_users, invalid_users = validate_badges(data)
+
+print("Valid:", valid_users)
+print("Invalid:", invalid_users)
 ```
 
 ---
